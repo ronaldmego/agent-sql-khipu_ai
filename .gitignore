@@ -1,0 +1,52 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+.venv/
+venv/
+
+# Logs and data
+*.log
+logs/
+data/
+ref/
+!data/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Database
+*.csv
+*.sqlite
+*.sqlite3
+*.db
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.pdf
+
+# Docker
+*.tar
+*.tar.gz
