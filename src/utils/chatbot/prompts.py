@@ -158,3 +158,33 @@ Por favor:
 Devuelve solo la lista numerada en español, sin explicaciones adicionales."""
         
         return ChatPromptTemplate.from_template(template)
+    
+    @staticmethod
+    def get_critical_analysis_prompt() -> ChatPromptTemplate:
+        """Get the critical analysis prompt template for Deepseek"""
+        template = """Como experto en razonamiento y análisis crítico, evalúa el siguiente análisis de datos:
+
+{analysis}
+
+Por favor, proporciona:
+
+1. Evaluación de la Solidez del Análisis:
+   - ¿Qué tan bien respaldadas están las conclusiones por los datos?
+   - ¿Se han considerado todas las variables relevantes?
+   - ¿Existen sesgos o limitaciones en el análisis?
+
+2. Perspectivas Adicionales:
+   - ¿Qué aspectos importantes podrían haberse pasado por alto?
+   - ¿Qué preguntas adicionales surgen de este análisis?
+   - ¿Qué otros ángulos de análisis podrían ser valiosos?
+
+3. Recomendaciones para Profundizar:
+   - ¿Qué análisis adicionales serían útiles?
+   - ¿Qué datos complementarios podrían enriquecer el análisis?
+   - ¿Qué correlaciones o patrones merecen más investigación?
+
+Mantén un tono constructivo y objetivo, enfocándote en enriquecer el análisis original.
+
+Análisis Crítico:"""
+
+        return ChatPromptTemplate.from_template(template)

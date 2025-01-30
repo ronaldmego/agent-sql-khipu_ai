@@ -14,8 +14,8 @@ def display_header(show_connection_status: bool = True):
     st.markdown(
         """
         <div style='text-align: center;'>
-            <h1>Khipu AI 📊</h1>
-            <p style='font-size: 1.2em; color: #666;'>"Tu agente en exploracion de datos SQL con RAG"</p>
+            <h1>Data AI Team 📊 ~ Deepseek R1 🐋 + OpenAI 4o ⚙️</h1>
+            <p style='font-size: 1.2em; color: #666;'>"Equipo de Analisis Exploratorio, Insights y Revision Critica"</p>
         </div>
         """,
         unsafe_allow_html=True

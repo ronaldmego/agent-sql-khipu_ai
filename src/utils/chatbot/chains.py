@@ -2,6 +2,8 @@ from typing import Any, Dict
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 import logging
+
+from config.config import OLLAMA_INSIGHTS_MODEL
 from ...utils.database import get_schema, run_query
 from .prompts import ChatbotPrompts
 from ...utils.llm_provider import LLMProvider
@@ -49,35 +51,100 @@ class ChainBuilder:
         except Exception as e:
             logger.error(f"Error building SQL chain: {str(e)}")
             raise
-    
+
     @staticmethod
     def build_response_chain(sql_chain):
-        """Build the response generation chain with enhanced analysis"""
+        """Build the response generation chain"""
         try:
             prompt = ChatbotPrompts.get_response_prompt()
-            llm = LLMProvider.get_llm(
+            
+            # Obtener el modelo OpenAI para el análisis principal
+            main_llm = LLMProvider.get_llm(
                 provider=st.session_state.get('llm_provider', 'openai'),
                 model_name=st.session_state.get('llm_model_name'),
                 temperature=st.session_state.get('llm_temperature', 0.7)
             )
-            
-            # Enhanced chain with additional analysis steps
-            return (
-                RunnablePassthrough.assign(query=sql_chain)
-                .assign(schema=ChainBuilder._get_schema)
-                .assign(response=ChainBuilder._run_query)
-                .assign(temporal_analysis=ChainBuilder._analyze_temporal_patterns)
-                .assign(statistical_analysis=ChainBuilder._analyze_statistics)
-                .assign(comparative_analysis=ChainBuilder._analyze_comparisons)
+
+            # Chain principal
+            main_chain = (
+                RunnablePassthrough().assign(
+                    query=sql_chain,
+                    schema=ChainBuilder._get_schema,
+                    response=ChainBuilder._run_query,
+                    temporal_analysis=ChainBuilder._analyze_temporal_patterns,
+                    statistical_analysis=ChainBuilder._analyze_statistics,
+                    comparative_analysis=ChainBuilder._analyze_comparisons
+                )
                 | ChainBuilder._process_enhanced_response
-                | prompt
-                | llm
+                | prompt 
+                | main_llm 
                 | StrOutputParser()
             )
+
+            def process_complete_response(x):
+                # Obtener la respuesta principal
+                main_response = main_chain.invoke(x)
+                
+                # Separar la parte de visualización si existe
+                viz_data = None
+                if "DATA:" in main_response:
+                    main_part, viz_part = main_response.split("DATA:", 1)
+                    viz_data = "DATA:" + viz_part
+                    main_response = main_part.strip()
+                
+                # Agregar el análisis crítico
+                response_with_critical = ChainBuilder._add_critical_analysis(main_response)
+                
+                # Reincorporar los datos de visualización si existían
+                if viz_data:
+                    response_with_critical += "\n\n" + viz_data
+                
+                return response_with_critical
+            
+            return RunnablePassthrough() | process_complete_response
+
         except Exception as e:
             logger.error(f"Error building response chain: {str(e)}")
             raise
-    
+
+    @staticmethod
+    def _add_critical_analysis(main_response: str) -> str:
+        """Add critical analysis after main analysis completes"""
+        try:
+            # Obtener Deepseek para el análisis crítico
+            critical_llm = LLMProvider.get_llm(
+                provider="ollama",
+                model_name=OLLAMA_INSIGHTS_MODEL,
+                temperature=0.7
+            )
+            
+            # Preprocesar el análisis principal para evitar caracteres problemáticos
+            clean_response = main_response.replace('\n\n', '\n').strip()
+            
+            # Obtener el prompt desde ChatbotPrompts
+            critical_prompt = ChatbotPrompts.get_critical_analysis_prompt()
+            
+            # Generar el análisis crítico
+            try:
+                critical_analysis = critical_llm.invoke(
+                    critical_prompt.format_prompt(analysis=clean_response).to_string()
+                )
+                
+                # Verificar que el análisis crítico sea válido antes de agregarlo
+                if critical_analysis and isinstance(critical_analysis, str) and len(critical_analysis.strip()) > 50:
+                    return f"{main_response}\n\n🤔 Análisis Crítico del Razonamiento:\n{critical_analysis}"
+                else:
+                    logger.info("Critical analysis was too short or invalid - skipping")
+                    return main_response
+                    
+            except Exception as inner_e:
+                logger.info(f"Critical analysis generation failed - skipping: {str(inner_e)}")
+                return main_response
+                
+        except Exception as e:
+            logger.info(f"Critical analysis setup failed - skipping: {str(e)}")
+            return main_response
+
     @staticmethod
     def _format_sql_input(vars: Dict[str, Any]) -> Dict[str, Any]:
         """Format input for SQL prompt template"""

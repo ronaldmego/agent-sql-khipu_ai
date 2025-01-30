@@ -42,6 +42,7 @@ OPENAI_MODELS = Config.parse_models(Config.get_env("OPENAI_MODELS", ""))
 # Ollama Config
 OLLAMA_BASE_URL = Config.get_env("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_DEFAULT_MODEL = Config.get_env("OLLAMA_DEFAULT_MODEL", "llama3:8b-instruct-q8_0")
+OLLAMA_INSIGHTS_MODEL = Config.get_env("OLLAMA_INSIGHTS_MODEL", OLLAMA_DEFAULT_MODEL)  # Nueva variable
 OLLAMA_MODELS = Config.parse_models(Config.get_env("OLLAMA_MODELS", ""))
 
 # Database Config

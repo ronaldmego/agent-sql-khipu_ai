@@ -12,9 +12,11 @@ from config.config import (
 
 logger = logging.getLogger(__name__)
 
+# src/utils/llm_provider.py
+
 class LLMProvider:
     @staticmethod
-    def get_llm(provider: str = "openai", model_name: Optional[str] = None, **kwargs) -> BaseChatModel:
+    def get_llm(provider: str = "openai", model_name: Optional[str] = None, force_model: Optional[str] = None, **kwargs) -> BaseChatModel:
         try:
             if provider == "openai":
                 api_key = st.session_state.get('OPENAI_API_KEY')
@@ -33,7 +35,7 @@ class LLMProvider:
             
             elif provider == "ollama":
                 return OllamaLLM(
-                    model=model_name or get_default_model("ollama"),
+                    model=force_model or model_name or get_default_model("ollama"),
                     temperature=kwargs.get('temperature', 0.7),
                     base_url=OLLAMA_BASE_URL
                 )
