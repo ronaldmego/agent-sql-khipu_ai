@@ -15,7 +15,7 @@ from config.config import (
 )
 
 st.set_page_config(
-    page_title="Data AI Team 📊 ~ Deepseek R1 🐋 + OpenAI 4o ⚙️",
+    page_title="Data AI Team ~ Deepseek R1 🐋 + OpenAI 4o ⚙️",
     page_icon="📊",
     layout="wide"
 )

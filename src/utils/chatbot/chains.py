@@ -132,7 +132,7 @@ class ChainBuilder:
                 
                 # Verificar que el análisis crítico sea válido antes de agregarlo
                 if critical_analysis and isinstance(critical_analysis, str) and len(critical_analysis.strip()) > 50:
-                    return f"{main_response}\n\n🤔 Análisis Crítico del Razonamiento:\n{critical_analysis}"
+                    return f"{main_response}\n\n## 🐋 Análisis Crítico del Razonamiento\n{critical_analysis}"
                 else:
                     logger.info("Critical analysis was too short or invalid - skipping")
                     return main_response
