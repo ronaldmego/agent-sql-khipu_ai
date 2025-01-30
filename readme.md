@@ -17,6 +17,8 @@ Un asistente de análisis de datos impulsado por IA que permite consultar bases 
 
 La arquitectura de Khipu AI está diseñada para ser modular, extensible y fácil de mantener:
 
+![Khipu demo](assets/images/khipu-gif.gif)
+
 ![Khipu AI Architecture](assets/images/architecture.svg)
 
 ### Componentes Principales:
