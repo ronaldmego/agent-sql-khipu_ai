@@ -23,6 +23,7 @@ venv/
 logs/
 data/
 ref/
+project_to_markdown_output/
 !data/.gitkeep
 
 # IDE
