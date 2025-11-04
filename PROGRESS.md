@@ -12,7 +12,7 @@
 | Milestone | Status | Tests | Commit | Updated |
 |-----------|--------|-------|--------|---------|
 | M0: Documentation & Planning | ✅ | - | 879fce7 | 2025-11-04 |
-| M1: UV Setup & Base Structure | ✅ | - | Pending | 2025-11-04 |
+| M1: UV Setup & Base Structure | ✅ | - | 28a62ac | 2025-11-04 |
 | M2: Database Service (Foundation) | ⏳ | 0/5 | - | - |
 | M3: Database Service - PostgreSQL | ⏳ | 0/10 | - | - |
 | M4: Query Service (LangChain) | ⏳ | 0/8 | - | - |
@@ -642,6 +642,8 @@ docker-compose --version  # Should show docker-compose version
 
 ### Latest Commits:
 ```
+28a62ac [milestone-1] UV setup and microservices base structure
+b014819 [milestone-0] Update PROGRESS.md - Milestone 0 complete
 879fce7 [milestone-0] Create refactor documentation (INITIAL, CLAUDE, PROGRESS)
 ```
 
@@ -676,11 +678,12 @@ None yet
 
 ## Next Actions
 
-### Immediate Next Steps (After M0 Complete):
-1. Commit documentation files (INITIAL.md, CLAUDE.md, PROGRESS.md)
-2. Verify git branch: `git branch`
-3. Install UV: `curl -LsSf https://astral.sh/uv/install.sh | sh`
-4. Begin Milestone 1: UV setup and base structure
+### Immediate Next Steps (After M1 Complete):
+1. Begin Milestone 2: Database Service Foundation
+2. Create services/database/pyproject.toml
+3. Add dependencies: asyncpg, fastapi, uvicorn, pydantic
+4. Create basic FastAPI app with health check
+5. Test service runs locally
 
 ### Waiting On:
 Nothing (ready to proceed)
