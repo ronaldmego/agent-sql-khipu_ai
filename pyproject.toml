@@ -1,0 +1,108 @@
+[project]
+name = "khipu-ai"
+version = "2.0.0"
+description = "Intelligent data analysis assistant with natural language to SQL using LangChain and RAG - Microservices Architecture"
+authors = [
+    {name = "Ronald Mego", email = "ronaldmego@example.com"}
+]
+readme = "readme.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+keywords = ["sql", "natural-language", "langchain", "rag", "data-analysis", "postgresql", "microservices"]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/ronaldmego/agent-sql-khipu_ai"
+Repository = "https://github.com/ronaldmego/agent-sql-khipu_ai"
+Documentation = "https://github.com/ronaldmego/agent-sql-khipu_ai/tree/main/docs"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+# UV configuration
+dev-dependencies = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.8.0",
+    "black>=24.0.0",
+    "mypy>=1.8.0",
+]
+
+[tool.ruff]
+# Linting configuration
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "N", "W", "B", "Q"]
+ignore = ["E501"]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.black]
+# Code formatting
+line-length = 100
+target-version = ["py311"]
+
+[tool.pytest.ini_options]
+# Pytest configuration
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "e2e: End-to-end tests",
+    "slow: Slow running tests",
+]
+
+[tool.coverage.run]
+# Coverage configuration
+source = ["services"]
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/.venv/*",
+]
+
+[tool.coverage.report]
+# Coverage reporting
+precision = 2
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.mypy]
+# Type checking configuration
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true

@@ -17,6 +17,25 @@ dist/
 *.egg
 .venv/
 venv/
+ENV/
+env.bak/
+venv.bak/
+
+# UV package manager
+.uv/
+.uv-cache/
+uv.lock
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+.tox/
+.nox/
 
 # Logs and data
 *.log
@@ -51,3 +70,21 @@ project_to_markdown_output/
 # Docker
 *.tar
 *.tar.gz
+docker-compose.override.yml
+
+# Vector stores and ML artifacts
+faiss_index/
+vector_store/
+*.index
+*.pkl
+*.pickle
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*~
+
+# Service-specific generated files
+services/*/requirements.txt
+services/*/.env

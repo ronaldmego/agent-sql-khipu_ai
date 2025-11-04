@@ -12,7 +12,7 @@
 | Milestone | Status | Tests | Commit | Updated |
 |-----------|--------|-------|--------|---------|
 | M0: Documentation & Planning | ✅ | - | 879fce7 | 2025-11-04 |
-| M1: UV Setup & Base Structure | ⏳ | - | - | - |
+| M1: UV Setup & Base Structure | ✅ | - | Pending | 2025-11-04 |
 | M2: Database Service (Foundation) | ⏳ | 0/5 | - | - |
 | M3: Database Service - PostgreSQL | ⏳ | 0/10 | - | - |
 | M4: Query Service (LangChain) | ⏳ | 0/8 | - | - |
@@ -72,43 +72,46 @@ None
 
 ### Milestone 1: UV Setup & Base Structure
 
-**Status**: ⏳ Pending
-**Started**: -
-**Completed**: -
-**Tests Passing**: -
+**Status**: ✅ Complete
+**Started**: 2025-11-04
+**Completed**: 2025-11-04
+**Tests Passing**: N/A (setup only)
 
 #### Tasks Checklist:
-- [ ] Install UV: `curl -LsSf https://astral.sh/uv/install.sh | sh`
-- [ ] Verify UV installation: `uv --version`
-- [ ] Create root `pyproject.toml` (project metadata)
-- [ ] Create `services/` directory structure
-- [ ] Create `.dockerignore` file
-- [ ] Update `.gitignore` for UV cache and virtual envs
-- [ ] Test UV basic commands
+- [x] Install UV: Already installed (v0.8.17)
+- [x] Verify UV installation: `uv --version`
+- [x] Create root `pyproject.toml` (project metadata)
+- [x] Create `services/` directory structure (4 services)
+- [x] Create `.dockerignore` file
+- [x] Update `.gitignore` for UV cache and virtual envs
+- [x] Create `__init__.py` files in all packages
+- [x] Create README.md for each service
 
-#### Expected Deliverables:
+#### Deliverables Created:
 ```
 project-root/
-├── services/  (empty directory structure)
-├── pyproject.toml (root-level metadata)
-├── .dockerignore
-└── .gitignore (updated)
+├── services/
+│   ├── database/ (with src/, tests/, README.md)
+│   ├── query/ (with src/, tests/, README.md)
+│   ├── rag/ (with src/, tests/, README.md)
+│   └── frontend/ (with src/, tests/, README.md)
+├── pyproject.toml (root-level metadata, linting config)
+├── .dockerignore (comprehensive)
+└── .gitignore (updated with UV, testing, Docker patterns)
 ```
 
-#### Test Results:
-```
-Not yet run
-```
-
-#### Commit:
-```
-Not yet committed
-```
+#### Structure Details:
+- **4 microservices** with FastAPI structure (src/api/endpoints/, core/, models/, utils/)
+- **24 __init__.py files** created for Python packages
+- **4 service READMEs** documenting purpose, ports, APIs
+- **Root pyproject.toml** with pytest, ruff, black, mypy configs
+- **UV v0.8.17** verified working
 
 #### Notes:
-- UV is a modern Python package manager written in Rust
-- Much faster than pip for dependency resolution
-- Compatible with existing tools (pyproject.toml, requirements.txt)
+- UV already installed, no internet access needed
+- Each service has standard FastAPI structure
+- Services ready for pyproject.toml creation in M2
+- Frontend will use Streamlit instead of FastAPI (exception)
 
 #### Blockers:
 None
