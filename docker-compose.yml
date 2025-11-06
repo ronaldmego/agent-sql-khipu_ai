@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database (for local development)
+  postgres:
+    image: postgres:16-alpine
+    container_name: khipu-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: khipu_user
+      POSTGRES_PASSWORD: khipu_pass_dev
+      POSTGRES_DB: khipu_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/postgresql/init_db.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U khipu_user -d khipu_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - khipu-network
+
+  # Database Service (FastAPI)
+  database:
+    build: ./services/database
+    container_name: khipu-database-service
+    restart: unless-stopped
+    ports:
+      - "8003:8000"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=khipu_user
+      - POSTGRES_PASSWORD=khipu_pass_dev
+      - POSTGRES_DATABASE=khipu_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - khipu-network
+
+  # Query Service (FastAPI + LangChain) - To be implemented
+  # query:
+  #   build: ./services/query
+  #   container_name: khipu-query-service
+  #   ports:
+  #     - "8001:8000"
+  #   environment:
+  #     - DATABASE_SERVICE_URL=http://database:8000
+  #   depends_on:
+  #     - database
+  #   networks:
+  #     - khipu-network
+
+  # RAG Service (FastAPI + FAISS) - To be implemented
+  # rag:
+  #   build: ./services/rag
+  #   container_name: khipu-rag-service
+  #   ports:
+  #     - "8002:8000"
+  #   networks:
+  #     - khipu-network
+
+  # Frontend Service (Streamlit) - To be implemented
+  # frontend:
+  #   build: ./services/frontend
+  #   container_name: khipu-frontend
+  #   ports:
+  #     - "8501:8501"
+  #   environment:
+  #     - QUERY_SERVICE_URL=http://query:8000
+  #     - RAG_SERVICE_URL=http://rag:8000
+  #     - DATABASE_SERVICE_URL=http://database:8000
+  #   depends_on:
+  #     - query
+  #     - rag
+  #     - database
+  #   networks:
+  #     - khipu-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  khipu-network:
+    driver: bridge
